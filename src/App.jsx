@@ -7,6 +7,17 @@ import Dashboard from "./component/Dashboard";
 import { theme } from "./theme";
 import Layout from "./component/dash_component/Layout";
 
+const isAuthenticated = () => {
+  return localStorage.getItem("isAuthenticated") === "true";
+};
+
+const ProtectedRoute = ({ children }) => {
+  if (!isAuthenticated()) {
+    return <Navigate to="/login" replace />;
+  }
+  return children;
+};
+
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
@@ -20,9 +31,11 @@ const App = () => {
           <Route
             path="/dashboard"
             element={
-              <Layout>
-                <Dashboard />
-              </Layout>
+              <ProtectedRoute>
+                <Layout>
+                  <Dashboard />
+                </Layout>
+              </ProtectedRoute>
             }
           />
 
